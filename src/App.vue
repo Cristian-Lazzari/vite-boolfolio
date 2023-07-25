@@ -1,30 +1,57 @@
-<script setup>
-import HelloWorld from './components/HelloWorld.vue'
+<script>
+import axios from 'axios';
+import AppHeader from './components/AppHeader.vue';
+import AppFooter from './components/AppFooter.vue';
+
+export default{
+  components: {
+        AppFooter,
+        AppHeader,
+    },
+
+  data(){
+      return{
+        projects:[],
+        currentPage:'',
+      }
+  },
+  methods: {
+    getallresult(){
+      axios.get("http://localhost:8000/api/projects", {})
+      .then(rensponse => this.projects = rensponse.data.data);
+    } 
+  },
+  created() {
+    this.getallresult();
+
+  },
+
+}
+
 </script>
 
+
+ 
 <template>
-  <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
+  <AppHeader />
+
+  <div
+  class="card" 
+  v-for="project in projects" 
+  :key="project.id">
+    <h2>
+      {{project.name}}
+    </h2>
+    <h3>{{ project.category.name }}</h3>
   </div>
-  <HelloWorld msg="Vite + Vue" />
+
+  <AppFooter />
 </template>
 
-<style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-}
+
+
+
+<style lang="scss">
+
+
 </style>
